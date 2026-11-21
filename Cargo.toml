@@ -1,0 +1,14 @@
+[package]
+name = "rustos-shell"
+version = "0.1.0"
+edition = "2021"
+description = "RustOS userspace shell + init: core-only parser (usable no_std), std shell builtins, syscall numbers, host demo binary"
+license = "MIT OR Apache-2.0"
+
+[[bin]]
+name = "rustos-shell"
+path = "src/main.rs"
+
+[lib]
+name = "rustos_shell"
+path = "src/lib.rs"
