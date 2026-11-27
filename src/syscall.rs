@@ -17,6 +17,11 @@ pub const SYS_CLOSE: u64 = 3;
 pub const SYS_YIELD: u64 = 24;
 /// exit(code) -> never returns.
 pub const SYS_EXIT: u64 = 60;
+/// uptime() -> milliseconds since boot. RustOS-private number 1000
+/// (see `rustos-process/src/syscall.rs`): Linux has no uptime
+/// syscall. Added in Batch 9 for the userspace shell's `uptime`
+/// builtin.
+pub const SYS_UPTIME: u64 = 1000;
 
 /// Standard file descriptors.
 pub const FD_STDIN: u64 = 0;
@@ -32,6 +37,7 @@ pub fn syscall_name(n: u64) -> &'static str {
         SYS_CLOSE => "close",
         SYS_YIELD => "yield",
         SYS_EXIT => "exit",
+        SYS_UPTIME => "uptime",
         _ => "unknown",
     }
 }
@@ -44,6 +50,7 @@ pub const ALL_SYSCALLS: &[(u64, &str)] = &[
     (SYS_CLOSE, "close"),
     (SYS_YIELD, "yield"),
     (SYS_EXIT, "exit"),
+    (SYS_UPTIME, "uptime"),
 ];
 
 #[cfg(test)]
@@ -63,8 +70,10 @@ mod tests {
         assert_eq!(syscall_name(SYS_OPEN), "open");
         assert_eq!(syscall_name(SYS_EXIT), "exit");
         assert_eq!(syscall_name(SYS_YIELD), "yield");
+        assert_eq!(syscall_name(SYS_UPTIME), "uptime");
+        assert_eq!(SYS_UPTIME, 1000);
         assert_eq!(syscall_name(999), "unknown");
-        assert_eq!(ALL_SYSCALLS.len(), 6);
+        assert_eq!(ALL_SYSCALLS.len(), 7);
         assert_eq!(FD_STDOUT, 1);
     }
 }
